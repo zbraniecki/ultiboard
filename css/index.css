@@ -1,0 +1,82 @@
+.field {
+  background-color: #539400;
+  border: 2px solid white;
+  outline: 10px solid #539400; 
+  position: absolute;
+  display: none;
+}
+
+.zone {
+  background-color: #438400;
+  position: absolute;
+  border-color: white;
+  border-style: dashed;
+}
+
+.field.horizontal > .zone {
+  height: 100%;
+  width: 144px;
+  right: 0;
+  top: 0;
+  border-width: 0 0 0 2px;
+}
+
+.field.horizontal > .zone:first-child {
+  top: 0;
+  left: 0;
+  border-width: 0 2px 0 0;
+}
+
+.field.vertical > .zone {
+  height: 144px;
+  width: 296px;
+  bottom: 0;
+  left: 0;
+  border-width: 2px 0 0 0;
+}
+
+.field.vertical > .zone:first-child {
+  top: 0;
+  left: 0;
+  border-width: 0 0 2px 0;
+}
+
+
+.zone:first-child {
+  position: absolute;
+}
+
+.player, .disc {
+  border: 2px solid white;
+  border-radius: 25px;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  text-align: center;
+  color: white;
+  font-size: 0.7em;
+  line-height: 20px;
+  font-family: Arial;
+  display: none;
+
+  transition-property: left, right, top, bottom;
+  transition-duration: 2s;
+}
+
+.player.home {
+  background-color: blue;
+  position: absolute;
+}
+
+.player.away {
+  background-color: red;
+  position: absolute;
+}
+
+.disc {
+  background-color: #b3e100;
+  position: absolute;
+  width: 13px;
+  height: 13px;
+  border: 1px solid white;
+}
