@@ -94,12 +94,15 @@ function load_plays() {
       for (var i in data) {
         $("<option/>").attr('value', i).text(i).appendTo($("#plays"));
       }
-      position_players(setups['pool']);
+      position_players(setups[settings['play']]);
     }
   );
 }
 
 function init() {
+  if (location.hash) {
+    settings['play'] = location.hash.substr(1);
+  }
   setupField();
   $(".field").show();
   load_plays();
