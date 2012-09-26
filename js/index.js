@@ -6,7 +6,8 @@ var settings = {
     'orientation': 'horizontal',
     'width': 100,
     'height': 37,
-    'scale': 9,
+    'zone': 18,
+    'scale': 8,
   },
   'play': 'pool',
 }
@@ -18,16 +19,28 @@ function setupField() {
   var width = settings['field']['width']*scale;
   var height = settings['field']['height']*scale;
   if (orient == 'vertical') {
-    rotate = 90;
-    width = height;
-    height = settings['field']['width']*scale;
+    $(".field")
+      .removeClass('vertical')
+      .removeClass('horizontal')
+      .addClass(orient)
+      .css({'width': height,
+        'height': width});
+    $(".zone").css({
+      'height': settings['field']['zone']*scale,
+      'width': '100%'
+    });
+  } else {
+    $(".field")
+      .removeClass('vertical')
+      .removeClass('horizontal')
+      .addClass(orient)
+      .css({'width': width,
+        'height': height});
+    $(".zone").css({
+      'width': settings['field']['zone']*scale,
+      'height': '100%'
+    });
   }
-  $(".field")
-    .removeClass('vertical')
-    .removeClass('horizontal')
-    .addClass(orient)
-    .css({'width': width,
-          'height': height});
 }
 
 

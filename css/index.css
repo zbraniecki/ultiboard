@@ -14,8 +14,6 @@
 }
 
 .field.horizontal > .zone {
-  height: 100%;
-  width: 144px;
   right: 0;
   top: 0;
   border-width: 0 0 0 2px;
@@ -28,7 +26,6 @@
 }
 
 .field.vertical > .zone {
-  height: 144px;
   width: 296px;
   bottom: 0;
   left: 0;
