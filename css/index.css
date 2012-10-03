@@ -77,3 +77,18 @@
   height: 13px;
   border: 1px solid white;
 }
+
+#vision {
+  width: 0px;
+  height: 0px;
+  position: absolute;
+  border-radius: 45px;
+  border-left: 45px solid #ffff66;
+  border-top: 45px solid transparent;
+  border-right: 45px solid transparent;
+  border-bottom: 45px solid transparent;
+  -moz-transform:rotate(120deg);
+  opacity: 0.3;
+  top: 40px;
+  left:40px;
+}
