@@ -82,6 +82,9 @@
   }
 
   Field.position_players = function(play) {
+    if (play === undefined) {
+      play = Data.get_data('kf');
+    }
     for (var i=0;i<play['home'].length;i++) {
       $(".player"+(i+1)+".home").css(Field.calculate_pos(play['home'][i])).show();
     }

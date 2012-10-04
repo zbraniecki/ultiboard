@@ -2,22 +2,49 @@
   <head>
     <title>UltiBoard</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
+    <script type="text/javascript" src="./js/ui.js"></script>
     <script type="text/javascript" src="./js/data.js"></script>
     <script type="text/javascript" src="./js/field.js"></script>
     <script type="text/javascript" src="./js/index.js"></script>
     <script type="text/javascript" src="./js/jquery.js"></script>
   </head>
   <body onload="init()">
-    <select onchange="switch_mode(this)">
-      <option value="horizontal">horizontal</option>
-      <option value="vertical">vertical</option>
-    </select>
-    <select id="plays" onchange="switch_play(this)"></select>
-    <select id="scenarios"></select>
-    <select id="kfs"></select>
-    <input type="checkbox" onchange="switch_fov()"/> FOV
-    <hr/>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">UltiBoard</a>
+          <ul class="nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Orientation <b class="caret"></b></a>
+              <ul class="dropdown-menu" id="orientations">
+                <li data-value="horizontal"><a href="#">Horizontal</a></li>
+                <li data-value="vertical"><a href="#">Vertical</a></li>
+              </ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Play <b class="caret"></b></a>
+              <ul id="plays" class="dropdown-menu"></ul>
+            </li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scenario <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#">Foo</a></li>
+                <li><a href="#">Foo2</a></li>
+              </ul>
+            </li>
+          </ul>
+      <select id="scenario" class="span3"></select>
+      <select id="kf" class="span2"></select>
+      <label class="checkbox inline">
+        <input type="checkbox" onchange="switch_fov()"/> FOV
+      </label>
+    </div>
+    </div>
+    </div>
+    <div class="container">
+    <h1></h1>
     <div class="field">
       <div class="zone"></div>
       <div class="zone"></div>
@@ -37,5 +64,8 @@
       <div class="player player7 away">7</div>
       <div class="disc"></div>
     </div>
+  </div>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <script type="text/javascript" src="./js/bootstrap.min.js"></script>
   </body>
 </html>

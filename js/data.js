@@ -62,54 +62,60 @@
     throw "Wrong parameters";
   }
 
-  Data.load_plays = function() {
+  Data.install_data = function(data) {
+    var tactics = Data.tactics;
+    var current = Data.tactic;
+
+    for (var i=0;i<data['plays'].length;i++) {
+      var p = data['plays'][i];
+      if (!tactics[p['type']]) {
+        tactics[p['type']] = {};
+      }
+      if (current['type'] === null) {
+        current['type'] = p['type'];
+      }
+      tactics[p['type']][p['id']] = p;
+    }
+
+    for (var i in tactics) {
+      var a = $("<a/>").attr('href', '#').text(" -- " + i + " -- ");
+      var li = $("<li/>").append(a).addClass('disabled');
+      li.appendTo(UI.nodes.plays);
+      for (var j in tactics[i]) {
+        if (current['play'] === null) {
+          current['play'] = j;
+        }
+        var a = $("<a/>").attr('href', '#').html("&nbsp;&nbsp;" + j);
+        var li = $("<li/>").append(a);
+        li.appendTo(UI.nodes.plays);
+      }
+    }
+
+    Data.set_play();
+
+    Field.position_players(Data.get_data('kf')); 
+  }
+
+  Data.load_plays = function(callback) {
     $.getJSON(
         './4hands2.json',
         function(data) {
-          var tactics = Data.tactics;
-          var current = Data.tactic;
-
-          for (var i=0;i<data['plays'].length;i++) {
-            var p = data['plays'][i];
-            if (!tactics[p['type']]) {
-              tactics[p['type']] = {};
-            }
-            if (current['type'] === null) {
-              current['type'] = p['type'];
-            }
-            tactics[p['type']][p['name']] = p;
-          }
-
-          for (var i in tactics) {
-            $("<option/>").text(" -- " + i + " -- ").appendTo($("#plays"));
-            for (var j in tactics[i]) {
-              if (current['play'] === null) {
-                current['play'] = j;
-              }
-              $("<option/>").attr('value', j).html("&nbsp;&nbsp;" + j).appendTo($("#plays"));
-            }
-          }
-
-          var scenarios = Data.get_data('play')['scenarios'];
-          for (var i in scenarios) {
-            var s = scenarios[i];
-            if (current['scenario'] === null) {
-              current['scenario'] = i;
-            }
-            $("<option/>").attr('value', i).text(s['desc']).appendTo($("#scenarios"));
-          }
-
-          var kfs = Data.get_data('scenario')['kfs'];
-          for (var i in kfs) {
-            var k = kfs[i];
-            if (current['kf'] === null) {
-              current['kf'] = i;
-            }
-            $("<option/>").attr('value', i).text(k['desc']).appendTo($("#kfs"));
-          }
-          Field.position_players(Data.get_data('kf')); 
+          Data.install_data(data);
+          callback();
         }
     );
+  }
+
+  Data.set_play = function(play) {
+    if (play !== undefined) {
+      Data.tactic.play = play;
+    }
+    var scenarios = Data.get_data('play')['scenarios'];
+    for (var i in scenarios) {
+      Data.tactic.scenario = i;
+      break;
+    }
+    Data.tactic.kf = scenarios[i]['default'];
   }
 
 }).call(this);
