@@ -1,50 +1,13 @@
 var settings = {
-  'circle': {
-    'radius': 20,
-  },
-  'field': {
-    'orientation': 'horizontal',
-    'width': 100,
-    'height': 37,
-    'zone': 18,
-    'scale': 8,
-  },
-  'play': 'pool',
-}
-
-function setupField() {
-  var orient = settings['field']['orientation'];
-  var scale = settings['field']['scale'];
-  var rotate = 0;
-  var width = settings['field']['width']*scale;
-  var height = settings['field']['height']*scale;
-  if (orient == 'vertical') {
-    $(".field")
-      .removeClass('vertical')
-      .removeClass('horizontal')
-      .addClass(orient)
-      .css({'width': height,
-        'height': width});
-    $(".zone").css({
-      'height': settings['field']['zone']*scale,
-      'width': '100%'
-    });
-  } else {
-    $(".field")
-      .removeClass('vertical')
-      .removeClass('horizontal')
-      .addClass(orient)
-      .css({'width': width,
-        'height': height});
-    $(".zone").css({
-      'width': settings['field']['zone']*scale,
-      'height': '100%'
-    });
+  'tactics': {},
+  'tactic': {
+    'type': null,
+    'play': null,
+    'scenario': null,
+    'kf': null,
   }
 }
 
-
-var setups = {}
 
 function calculate_pos(pos, rotate) {
   if (pos['pos']) {
@@ -90,64 +53,111 @@ function position_players(play) {
   }
 }
 
+function get_type_for_play(play) {
+  for (var i in settings['tactics']) {
+    for (var j in settings['tactics'][j]) {
+      if (j === play) {
+        return i;
+      }
+    }
+  }
+  return false;
+}
+
+function get_data(name, type, play, scenario, kf) {
+  var ptr = null; // pointer;
+
+  if (type === undefined) {
+    type = settings['tactic']['type'];
+  }
+  ptr = settings['tactics'][type];
+  if (name === 'type') {
+    return ptr;
+  }
+
+  if (play === undefined) {
+    play = settings['tactic']['play'];
+  } else if (type === null) {
+    type = get_type_for_play(play);
+  }
+  ptr = ptr[play];
+  if (name == 'play') {
+    return ptr;
+  }
+
+  if (scenario === undefined) {
+    scenario = settings['tactic']['scenario'];
+  }
+  ptr = ptr['scenarios'][scenario];
+  if (name == 'scenario') {
+    return ptr;
+  }
+
+  if (kf === undefined) {
+    kf = settings['tactic']['kf'];
+  }
+  ptr = ptr['kfs'][kf];
+  if (name == 'kf') {
+    return ptr;
+  }
+  throw "Wrong parameters";
+}
+
 function load_plays() {
   $.getJSON(
     './4hands2.json',
     function(data) {
       setups = data;
-      var types = {};
-      var type = null;
-      var play = null;
-      var scenario = null;
-      var sid = null;
-      var kf = null;
-      var kfid = null;
+      var tactics = settings['tactics'];
+      var current = settings['tactic'];
 
       for (var i=0;i<data['plays'].length;i++) {
         var p = data['plays'][i];
-        if (!types[p['type']]) {
-          types[p['type']] = {};
+        if (!tactics[p['type']]) {
+          tactics[p['type']] = {};
         }
-        if (type === null) {
-          type = p['type'];
+        if (current['type'] === null) {
+          current['type'] = p['type'];
         }
-        types[p['type']][p['name']] = p;
+        tactics[p['type']][p['name']] = p;
       }
-      for (var i in types) {
-        $("<option/>").attr('value', i).text(i).appendTo($("#types"));
-      }
-      
-      for (var i in types[type]) {
-        if (play === null) {
-          play = i;
+
+      for (var i in tactics) {
+        $("<option/>").text(" -- " + i + " -- ").appendTo($("#plays"));
+        for (var j in tactics[i]) {
+          if (current['play'] === null) {
+            current['play'] = j;
+          }
+          $("<option/>").attr('value', j).html("&nbsp;&nbsp;" + j).appendTo($("#plays"));
         }
-        $("<option/>").attr('value', i).text(i).appendTo($("#plays"));
       }
-      for (var i in types[type][play]['scenarios']) {
-        var s = types[type][play]['scenarios'][i];
-        if (scenario === null) {
-          scenario = s;
-          sid = i;
+
+      var scenarios = get_data('play')['scenarios'];
+      for (var i in scenarios) {
+        var s = scenarios[i];
+        if (current['scenario'] === null) {
+          current['scenario'] = i;
         }
         $("<option/>").attr('value', i).text(s['desc']).appendTo($("#scenarios"));
       }
-      for (var i in types[type][play]['scenarios'][sid]['kfs']) {
-        var k = types[type][play]['scenarios'][sid]['kfs'][i];
-        if (kf === null) {
-          kf = k;
-          kfid = i;
+      
+      var kfs = get_data('scenario')['kfs'];
+      for (var i in kfs) {
+        var k = kfs[i];
+        if (current['kf'] === null) {
+          current['kf'] = i;
         }
         $("<option/>").attr('value', i).text(k['desc']).appendTo($("#kfs"));
       }
-      position_players(types[type][play]['scenarios'][sid]['kfs'][kfid]);
+      position_players(get_data('kf')); 
     }
   );
 }
 
 function draw_vision(player) {
   var pos = $(".player"+player).position();
-  var setup = setups[settings['play']];
-  var vis = setup['home'][player-1]['vis'];
+  var kf = get_data('kf');
+  var vis = kf['home'][player-1]['vis'];
   if (vis) {
     var d = $("<div/>").attr('id', 'vision').appendTo($(".field"));
     d.css({'top': pos['top']-45+10, 'left': pos['left']-45+10});
@@ -157,11 +167,11 @@ function draw_vision(player) {
 
 function init() {
   if (location.hash) {
-    settings['play'] = location.hash.substr(1);
+    settings['tactic']['play'] = location.hash.substr(1);
   }
-  setupField();
+  Field.setupField();
   $(".field").show();
-  load_plays();
+  //load_plays();
 }
 
 function switch_fov(f) {
