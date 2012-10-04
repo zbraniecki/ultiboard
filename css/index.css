@@ -1,5 +1,5 @@
 body > .container {
-  padding: 90px 0;
+  padding: 50px 0;
 }
 
 .field {
@@ -58,20 +58,25 @@ body > .container {
   font-size: 0.7em;
   line-height: 20px;
   font-family: Arial;
-  display: none;
 
   transition-property: left, right, top, bottom;
   transition-duration: 2s;
 }
 
+.field .player {
+  position: absolute;
+}
+
+.field .player.active {
+  background-color: yellow;
+}
+  
 .player.home {
   background-color: blue;
-  position: absolute;
 }
 
 .player.away {
   background-color: red;
-  position: absolute;
 }
 
 .disc {
@@ -82,7 +87,7 @@ body > .container {
   border: 1px solid white;
 }
 
-#vision {
+.vision {
   width: 0px;
   height: 0px;
   position: absolute;
@@ -97,6 +102,42 @@ body > .container {
   left:40px;
 }
 
-#kf, #scenario {
-  display: none;
+#legend {
+  width: 70%;
+  height: 28%;
+  position: absolute;
+  bottom: 0;
+  display: table;
 }
+
+#legend .table {
+  font-size: 1.0em;
+  margin: 0;
+  padding: 0;
+}
+
+#legend .table td {
+  line-height: 1.2em;
+  padding: 3px;
+}
+
+#legend .table tr.active td {
+  background-color: #333;
+  color: white;
+}
+
+#legend > .home {
+  width: 50%;
+  height: 100%;
+  display: table-cell;
+  background-color: #eef;
+}
+
+
+#legend > .away {
+  width: 50%;
+  height: 100%;
+  display: table-cell;
+  background-color: #fee;
+}
+

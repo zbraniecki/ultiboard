@@ -85,8 +85,10 @@
         if (current['play'] === null) {
           current['play'] = j;
         }
-        var a = $("<a/>").attr('href', '#').html("&nbsp;&nbsp;" + j);
-        var li = $("<li/>").append(a);
+        var a = $("<a/>").attr('href', '#')
+                         .html("&nbsp;&nbsp;" + tactics[i][j].name)
+                         .on('click', UI.onplaychange);
+        var li = $("<li/>").attr('data-value', j).append(a);
         li.appendTo(UI.nodes.plays);
       }
     }

@@ -16,7 +16,7 @@
         <div class="container">
           <a class="brand" href="#">UltiBoard</a>
           <ul class="nav">
-            <li class="dropdown">
+            <li class="dropdown hide">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Orientation <b class="caret"></b></a>
               <ul class="dropdown-menu" id="orientations">
                 <li data-value="horizontal"><a href="#">Horizontal</a></li>
@@ -27,18 +27,13 @@
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Play <b class="caret"></b></a>
               <ul id="plays" class="dropdown-menu"></ul>
             </li>
-            <li class="dropdown">
+            <li class="dropdown hide">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Scenario <b class="caret"></b></a>
-              <ul class="dropdown-menu">
-                <li><a href="#">Foo</a></li>
-                <li><a href="#">Foo2</a></li>
-              </ul>
+              <ul id="scenarios" class="dropdown-menu"></ul>
             </li>
           </ul>
-      <select id="scenario" class="span3"></select>
-      <select id="kf" class="span2"></select>
-      <label class="checkbox inline">
-        <input type="checkbox" onchange="switch_fov()"/> FOV
+      <label class="checkbox inline pull-right">
+        <input type="checkbox" id="vision"/> FOV
       </label>
     </div>
     </div>
@@ -48,13 +43,6 @@
     <div class="field">
       <div class="zone"></div>
       <div class="zone"></div>
-      <div class="player player1 home">1</div>
-      <div class="player player2 home">2</div>
-      <div class="player player3 home">3</div>
-      <div class="player player4 home">4</div>
-      <div class="player player5 home">5</div>
-      <div class="player player6 home">6</div>
-      <div class="player player7 home">7</div>
       <div class="player player1 away">1</div>
       <div class="player player2 away">2</div>
       <div class="player player3 away">3</div>
@@ -63,6 +51,29 @@
       <div class="player player6 away">6</div>
       <div class="player player7 away">7</div>
       <div class="disc"></div>
+    </div>
+    <ul id="kfs" class="nav nav-tabs nav-stacked pull-right"></ul>
+    <div id="legend">
+      <div class="home">
+        <table class="table table-hover table-condensed">
+          <tr>
+            <th>#</th>
+            <th>Role</th>
+            <th>Line A</th>
+            <th>Line B</th>
+          </tr>
+        </table>
+      </div>
+    <div class="away">
+        <table class="table table-hover table-condensed">
+          <tr>
+            <th>#</th>
+            <th>Role</th>
+            <th>Line A</th>
+            <th>Line B</th>
+          </tr>
+        </table>
+    </div>
     </div>
   </div>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
