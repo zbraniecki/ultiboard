@@ -45,6 +45,7 @@
     }
     UI.reset_scenario();
 
+    location.hash = Data.tactic.play;
     $('h1').html(Data.get_data('play').name+" <small>("+Data.get_data('scenario').desc+")</small>");
   }
 
@@ -75,7 +76,7 @@
     $("li[data-value="+Data.tactic.kf+"]", UI.nodes.kfs).addClass('active');
   }
 
-  UI.onmodechange = function() {
+  UI.onmodechange = function(e) {
     $('.field').hide();
     var val = $(this).parent().attr('data-value');
     $('.player, .disc').css('transition-property', 'none');
@@ -84,30 +85,31 @@
     Field.position_players();
     UI.reset_values();
     $('.field').show();
+    e.preventDefault();
   }
 
-  UI.onplaychange = function() {
+  UI.onplaychange = function(e) {
     var val = $(this).parent().attr('data-value');
     Data.set_play(val);
     UI.reset_values();
-    $('.player, .disc').css('transition-property', 'none');
     Field.position_players();
+    e.preventDefault();
   }
 
-  UI.onscenariochange = function() {
+  UI.onscenariochange = function(e) {
     var val = $(this).parent().attr('data-value');
     Data.set_scenario(val);
     UI.reset_scenario();
-    $('.player, .disc').css('transition-property', 'none');
     Field.position_players();
+    e.preventDefault();
   }
 
-  UI.onkfchange = function() {
+  UI.onkfchange = function(e) {
     var val = $(this).parent().attr('data-value');
     Data.set_kf(val);
     UI.reset_kf();
-    $('.player, .disc').css('transition-property', 'top, left');
     Field.position_players(null, true);
+    e.preventDefault();
   }
 
   UI.onvisionchange = function() {

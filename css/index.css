@@ -62,7 +62,9 @@ body > .container {
   font-family: Arial;
 
   transition-property: left, right, top, bottom;
-  transition-duration: 2s;
+  transition-duration: 1s;
+  -webkit-transition-property: left, right, top, bottom;
+  -webkit-transition-duration: 1s;
 }
 
 .field .player {
@@ -89,6 +91,7 @@ body > .container {
   height: 13px;
   border: 1px solid white;
   z-index: 8;
+  display: none;
 }
 
 .vision {
