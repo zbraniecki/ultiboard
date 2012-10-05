@@ -41,6 +41,8 @@
         .addClass(orient)
         .css({'width': width,
           'height': height});
+      $('svg').css({'width': width,
+          'height': height});
       $(".zone").css({
         'width': st['zone']*scale,
         'height': '100%'
@@ -82,28 +84,33 @@
     return obj;
   }
 
-  Field.position_players = function(play) {
-    if (play === undefined) {
+  Field.position_players = function(play, preserve) {
+    if (!preserve) {
+      $(".field .player").remove();
+      $("#legend table tr.player").remove();
+    }
+    if (!play) {
       play = Data.get_data('kf');
     }
-
     var tableHome = $("#legend .home table");
     for (var i=0;i<play['home'].length;i++) {
-      $("<div/>")
-        .text(i+1)
-        .addClass('player')
-        .addClass('player'+(i+1))
-        .addClass('home')
-        .css(Field.calculate_pos(play['home'][i]))
-        .on('mouseover', function() {
-          Field.focus_player('home', $(this).text())
-        })
+      if (!preserve) {
+        $("<div/>")
+          .text(i+1)
+          .addClass('player')
+          .addClass('player'+(i+1))
+          .addClass('home')
+          .css(Field.calculate_pos(play['home'][i]))
+          .on('mouseover', function() {
+            Field.focus_player('home', $(this).text())
+          })
         .on('mouseout', function() {
           Field.unfocus_players('home');
         })
         .appendTo($(".field"));
       var tr = $("<tr/>")
         .addClass('player'+(i+1))
+        .addClass('player')
         .on('mouseover', function() {
         var nr = $(this).children().first().text();
         Field.focus_player('home', nr);
@@ -119,11 +126,35 @@
       var td3 = $("<td/>").text(person[0]).appendTo(tr);
       var td4 = $("<td/>").text(person[1]).appendTo(tr);
       tr.appendTo(tableHome);
+      } else {
+        $(".field .home.player"+(i+1)).css(Field.calculate_pos(play['home'][i]))
+      }
     }
     var tableAway = $("#legend .away table");
     for (var i=0;i<play['away'].length;i++) {
-      $(".field .player"+(i+1)+".away").css(Field.calculate_pos(play['away'][i])).show();
-      var tr = $("<tr/>");
+      if (!preserve) {
+      $("<div/>")
+        .text(i+1)
+        .addClass('player')
+        .addClass('player'+(i+1))
+        .addClass('away')
+        .css(Field.calculate_pos(play['away'][i]))
+        .on('mouseover', function() {
+          Field.focus_player('away', $(this).text())
+        })
+        .on('mouseout', function() {
+          Field.unfocus_players('away');
+        })
+        .appendTo($(".field"));
+      var tr = $("<tr/>")
+        .addClass('player'+(i+1))
+        .addClass('player')
+        .on('mouseover', function() {
+        var nr = $(this).children().first().text();
+        Field.focus_player('away', nr);
+      }).on('mouseout', function() {
+        Field.unfocus_players('away');
+      });
       var td1 = $("<td/>").text(i+1).appendTo(tr);
       var td2 = $("<td/>").text(play['away'][i]['role']).appendTo(tr);
       var person = play['away'][i]['person'];
@@ -133,6 +164,9 @@
       var td3 = $("<td/>").text(person[0]).appendTo(tr);
       var td4 = $("<td/>").text(person[1]).appendTo(tr);
       tr.appendTo(tableAway);
+      } else {
+        $(".field .away.player"+(i+1)).css(Field.calculate_pos(play['away'][i]))
+      }
     }
     if (play['disc']) {
       $(".disc").css(Field.calculate_pos(play['disc'])).show();
@@ -141,12 +175,12 @@
 
   Field.focus_player = function(team, nr) {
     $(".field ."+team+".player"+nr).addClass('active');
-    $("#legend .home table tr.player"+nr).addClass('active');
+    $("#legend ."+team+" table tr.player"+nr).addClass('active');
   }
 
   Field.unfocus_players = function(team, nr) {
     $(".field ."+team+".player").removeClass('active');
-    $("#legend .home table tr").removeClass('active');
+    $("#legend ."+team+" table tr").removeClass('active');
   }
 
   Field.draw_vision = function(player) {
@@ -162,6 +196,28 @@
 
   Field.clear_vision = function() {
     $(".vision").remove();
+  }
+
+  Field.draw_area = function(player) {
+    var kf = Data.get_data('kf');
+    var cov = kf['home'][player-1]['cov'];
+    /*
+     <svg xmlns="http://www.w3.org/2000/svg" version="1.1"
+  preserveAspectRatio="xMidYMid slice"
+  style="width:300px; height:300px; position:absolute; top:100px; left:100px; z-index:30;">
+  <ellipse cx="60" cy="60" rx="50" ry="25" fill="red" style="opacity: 0.3"/>
+</svg>
+   */
+    //var svg = $("<svg/>").css('border', '1px solid black');
+    //svg.appendTo($(".field"));
+    var area = $("<ellipse/>").attr({
+      'cx': 60,
+      'cy': 60,
+      'rx': 50,
+      'ry': 25,
+      'fill': 'red',
+    });
+    area.appendTo($("svg"));
   }
 
 }).call(this);

@@ -11,4 +11,5 @@ function init() {
 
 function ondataloaded() {
   UI.reset_values();
+  Field.draw_area(1);
 }

@@ -100,7 +100,7 @@
 
   Data.load_plays = function(callback) {
     $.getJSON(
-        './4hands2.json',
+        './4hands.json',
         function(data) {
           Data.install_data(data);
           callback();
@@ -118,6 +118,20 @@
       break;
     }
     Data.tactic.kf = scenarios[i]['default'];
+  }
+
+  Data.set_scenario = function(scenario) {
+    if (scenario !== undefined) {
+      Data.tactic.scenario = scenario;
+    }
+    Data.tactic.kf = Data.get_data('scenario')['default'];
+    console.log(Data.tactic);
+  }
+
+  Data.set_kf = function(kf) {
+    if (kf !== undefined) {
+      Data.tactic.kf = kf;
+    }
   }
 
 }).call(this);

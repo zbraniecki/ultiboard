@@ -20,7 +20,6 @@
   }
 
   UI.reset_values = function() {
-    
     $("li", UI.nodes.orientations).removeClass('active');
     $("li[data-value="+Field.settings.orientation+"]", UI.nodes.orientations).addClass('active');
 
@@ -40,13 +39,17 @@
         li.appendTo(UI.nodes.scenarios);
       }
 
-      $("li", UI.nodes.scenarios).removeClass('active');
-      $("li[data-value="+Data.tactic.scenario+"]", UI.nodes.scenarios).addClass('active');
       UI.nodes.scenarios.parent().show();
     } else {
       UI.nodes.scenarios.parent().hide();
     }
+    UI.reset_scenario();
    
+
+    $('h1').text(Data.get_data('play').name);
+  }
+
+  UI.reset_scenario = function() {
     UI.nodes.kfs.empty(); 
     var kfs = Data.get_data('scenario')['kfs'];
     if (kfs.length > 1) {
@@ -58,11 +61,18 @@
         var li = $("<li/>").attr('data-value', i).append(a);
         li.appendTo(UI.nodes.kfs);
       }
+      UI.reset_kf();
       UI.nodes.kfs.show();
     } else {
       UI.nodes.kfs.hide();
     }
-    $('h1').text(Data.get_data('play').name);
+    $("li", UI.nodes.scenarios).removeClass('active');
+    $("li[data-value="+Data.tactic.scenario+"]", UI.nodes.scenarios).addClass('active');
+  }
+
+  UI.reset_kf = function() {
+    $("li", UI.nodes.kfs).removeClass('active');
+    $("li[data-value="+Data.tactic.kf+"]", UI.nodes.kfs).addClass('active');
   }
 
   UI.onmodechange = function() {
@@ -82,6 +92,22 @@
     UI.reset_values();
     $('.player, .disc').css('transition-property', 'none');
     Field.position_players();
+  }
+
+  UI.onscenariochange = function() {
+    var val = $(this).parent().attr('data-value');
+    Data.set_scenario(val);
+    UI.reset_scenario();
+    $('.player, .disc').css('transition-property', 'none');
+    Field.position_players();
+  }
+
+  UI.onkfchange = function() {
+    var val = $(this).parent().attr('data-value');
+    Data.set_kf(val);
+    UI.reset_kf();
+    $('.player, .disc').css('transition-property', 'top, left');
+    Field.position_players(null, true);
   }
 
   UI.onvisionchange = function() {
