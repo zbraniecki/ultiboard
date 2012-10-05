@@ -44,9 +44,8 @@
       UI.nodes.scenarios.parent().hide();
     }
     UI.reset_scenario();
-   
 
-    $('h1').text(Data.get_data('play').name);
+    $('h1').html(Data.get_data('play').name+" <small>("+Data.get_data('scenario').desc+")</small>");
   }
 
   UI.reset_scenario = function() {
@@ -68,6 +67,7 @@
     }
     $("li", UI.nodes.scenarios).removeClass('active');
     $("li[data-value="+Data.tactic.scenario+"]", UI.nodes.scenarios).addClass('active');
+    $("h1 small").text(" ("+Data.get_data('scenario').desc+")")
   }
 
   UI.reset_kf = function() {
